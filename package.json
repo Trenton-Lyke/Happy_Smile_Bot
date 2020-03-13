@@ -1,0 +1,17 @@
+{
+  "name": "quarterproject",
+  "version": "1.0.0",
+  "description": "Controlling twitter bot from website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Trenton Lyke",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "child_process": "^1.0.2",
+    "express": "^4.17.1",
+    "text-to-speech-js": "^1.1.9"
+  }
+}
