@@ -29,7 +29,7 @@ api = tweepy.API(auth)
 
 #replys to tweets with a given text and tweet id
 def reply(text,tweetId):
-    api.update_status(text,tweetId)
+    api.update_status(text,tweetId,count=1)
 
 #gets the mentions coming after a certain id
 def getMentions(last_seen_id):
@@ -82,27 +82,28 @@ mixer.init()
 #infinite loop with 30 second sleeping periods between iterations so the API
 #will not reject request for doing too many too quickly
 while True:
-    try:
-        #gets newest mentions based on last_seen_id.txt
-        last_seen_id=retrieveLastSeenId()
-        mentions = getMentions(last_seen_id)
-        #loops through all mentions in reverse from oldest to newest
-        for mention in reversed(mentions):
-            #finds if the mention contains #complimentme
-            if '#complimentme' in mention.text.lower():
-                print(mention.text.lower())
-                #gets random compliment and responds to mention
-                r = json.loads(requests.get('https://complimentr.com/api').text)
-                replyCompliment = r['compliment']
-                print(replyCompliment)
-                reply("@"+mention.user.screen_name+" "+replyCompliment,mention.id)
-                #says reply outloud
-                textToSpeech("Replying "+ r['compliment'] +" to "+mention.user.screen_name,'en',False)
-            #gets the last_seen_id looking through all the mentions
-            last_seen_id = mention.id
-        #stores the last seen id
-        storeLastSeenId(last_seen_id)
-        #waits for 30 seconds before executing the next iteration
-        time.sleep(30)
-    except:
-        pass
+    
+    #gets newest mentions based on last_seen_id.txt
+    last_seen_id=retrieveLastSeenId()
+    mentions = getMentions(last_seen_id)
+    #loops through all mentions in reverse from oldest to newest
+    
+    
+    for mention in reversed(mentions):
+        #finds if the mention contains #complimentme
+        if '#complimentme' in mention.text.lower() and last_seen_id != mention.id:
+            print(mention.text.lower())
+            #gets random compliment and responds to mention
+            r = json.loads(requests.get('https://complimentr.com/api').text)
+            replyCompliment = r['compliment']
+            print(replyCompliment)
+            #reply("@"+mention.user.screen_name+" "+replyCompliment,mention.id)
+            #says reply outloud
+            #textToSpeech("Replying "+ r['compliment'] +" to "+mention.user.screen_name,'en',False)
+        #gets the last_seen_id looking through all the mentions
+        last_seen_id = mention.id
+    #stores the last seen id
+    storeLastSeenId(last_seen_id)
+    #waits for 30 seconds before executing the next iteration
+    time.sleep(30)
+

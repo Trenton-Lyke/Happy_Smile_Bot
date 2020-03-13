@@ -1,3 +1,4 @@
+#deprecated check out ReplyComplimentTweetForever.py
 import datetime
 import json
 import numpy as np
